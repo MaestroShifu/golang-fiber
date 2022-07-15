@@ -1,3 +1,5 @@
+.PHONY: all # Sirve para poder correr cosas que no son con base a archivos, como comandos de la terminal
+
 install:
 	go mod tidy
 compile:
