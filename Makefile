@@ -6,9 +6,13 @@ compile:
 	GOOS=windows GOARCH=386 go build -o bin/main-windows-386 src/main.go
 build:
 	go build -o bin/main src/main.go
+build_air:
+	go build -o tmp/main src/main.go
 test:
 	go test
-run:
+dev:
+	air
+start:
 	go run src/main.go
 all:
 	echo "Ejecuta un flujo de tareas build run"
