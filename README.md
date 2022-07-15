@@ -11,3 +11,7 @@
 ```bash
 go install github.com/cosmtrek/air@latest
 ```
+2. Tenemos que instalar todas las librerias de nuestro proyecto que estan en nuestro `go.mod`.
+```bash
+go mod tidy
+```
