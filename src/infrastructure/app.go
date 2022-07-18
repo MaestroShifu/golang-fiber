@@ -1,8 +1,31 @@
 package infrastructure
 
 import (
+	"github.com/MaestroShifu/golang-fiber/src/infrastructure/interface/controllers"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/compress"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/helmet/v2"
 )
+
+func basicConfigApp(app *fiber.App) {
+	// Sirve para comprimir la respuesta usando [gzip]
+	app.Use(compress.New(compress.Config{
+		Level: compress.LevelBestCompression,
+	}))
+
+	// Sirve para activar los cors en nuestra aplicacion
+	app.Use(cors.New(cors.ConfigDefault))
+
+	// Conjunto de middlewares (Cositas para seguridad)
+	app.Use(helmet.New())
+
+	// Configuracion para tener logs en nuestro servidor
+	app.Use(logger.New(logger.Config{
+		Format: "[${time}] ${status} - ${latency} ${method} ${path}\n",
+	}))
+}
 
 func StartApp() *fiber.App {
 	config := fiber.Config{
@@ -14,9 +37,17 @@ func StartApp() *fiber.App {
 
 	app := fiber.New(config)
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello world!!")
-	})
+	// Add configuracion
+	basicConfigApp(app)
+
+	// Add controllers
+	controllers.AddMonitorController(app)
+
+	/* 	app.Get("/", func(c *fiber.Ctx) error {
+		configApp := GetConfigSystem()
+
+		return c.JSON(configApp)
+	}) */
 
 	return app
 }

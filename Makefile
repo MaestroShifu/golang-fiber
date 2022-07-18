@@ -13,8 +13,8 @@ build_air:
 test:
 	go test
 dev:
-	air
+	APP_ENV=development air
 start:
-	go run src/main.go
+	APP_ENV=production ./bin/main
 all:
 	echo "Ejecuta un flujo de tareas build run"

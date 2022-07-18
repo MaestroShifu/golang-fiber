@@ -1,4 +1,10 @@
+# Files o directory vscode
+.vscode
+
+# Directory generate by golang
 bin
 tmp
-.vscode
 go.sum
+
+# File env
+.env
