@@ -4,7 +4,6 @@
 # Directory generate by golang
 bin
 tmp
-go.sum
 
 # File env
 .env

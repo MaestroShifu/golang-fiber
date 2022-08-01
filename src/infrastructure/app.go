@@ -42,6 +42,7 @@ func StartApp() *fiber.App {
 
 	// Add controllers
 	controllers.AddMonitorController(app)
+	controllers.AddProductController(app)
 
 	/* 	app.Get("/", func(c *fiber.Ctx) error {
 		configApp := GetConfigSystem()

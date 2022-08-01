@@ -15,8 +15,12 @@ const (
 )
 
 type Config struct {
-	NAME_APP string `json:"NAME_APP"`
-	APP_ENV  string `json:"APP_ENV"`
+	NAME_APP          string `json:"NAME_APP"`
+	APP_ENV           string `json:"APP_ENV"`
+	DB_HOST           string `json:"DB_HOST"`
+	DB_USER           string `json:"DB_USER"`
+	POSTGRES_PASSWORD string `json:"POSTGRES_PASSWORD"`
+	DB_NAME           string `json:"DB_NAME"`
 }
 
 func getPathEnv() string {
@@ -39,7 +43,11 @@ func GetConfigSystem() Config {
 	}
 
 	return Config{
-		NAME_APP: os.Getenv("NAME_APP"),
-		APP_ENV:  APP_ENV,
+		NAME_APP:          os.Getenv("NAME_APP"),
+		APP_ENV:           APP_ENV,
+		DB_HOST:           os.Getenv("DB_HOST"),
+		DB_USER:           os.Getenv("DB_USER"),
+		POSTGRES_PASSWORD: os.Getenv("POSTGRES_PASSWORD"),
+		DB_NAME:           os.Getenv("DB_NAME"),
 	}
 }
