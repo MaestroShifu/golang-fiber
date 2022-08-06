@@ -1,6 +1,9 @@
 package infrastructure
 
 import (
+	"errors"
+
+	"github.com/MaestroShifu/golang-fiber/src/infrastructure/database"
 	"github.com/MaestroShifu/golang-fiber/src/infrastructure/interface/controllers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -27,7 +30,7 @@ func basicConfigApp(app *fiber.App) {
 	}))
 }
 
-func StartApp() *fiber.App {
+func StartApp() (*fiber.App, error) {
 	config := fiber.Config{
 		Prefork:       false,               // Genera multiples procesos en el mismo puerto, Con docker correr de forma CMD ["sh", "-c", "/app"]
 		CaseSensitive: true,                // Valida que las rutas sean escritas de forma estricta... sensible a mayusculas o minusculas
@@ -40,9 +43,19 @@ func StartApp() *fiber.App {
 	// Add configuracion
 	basicConfigApp(app)
 
+	// Start Connection
+	db, err := database.Connect()
+
+	if err != nil {
+		return nil, errors.New("database failed connection")
+	}
+
+	// Manage migration db
+	defer database.AutoMigrate(db)
+
 	// Add controllers
 	controllers.AddMonitorController(app)
-	controllers.AddProductController(app)
+	controllers.AddProductController(app, db)
 
 	/* 	app.Get("/", func(c *fiber.Ctx) error {
 		configApp := GetConfigSystem()
@@ -50,5 +63,5 @@ func StartApp() *fiber.App {
 		return c.JSON(configApp)
 	}) */
 
-	return app
+	return app, nil
 }

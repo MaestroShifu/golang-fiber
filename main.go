@@ -1,14 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"runtime"
 
 	"github.com/MaestroShifu/golang-fiber/src/infrastructure"
 )
 
 func main() {
-	app := infrastructure.StartApp()
+	app, err := infrastructure.StartApp()
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 	app.Listen(":3000")
-	fmt.Println("Esta son las arquitcturas:", runtime.GOOS, runtime.GOARCH)
+	log.Println("This is the arquitecture of system: ", runtime.GOOS, runtime.GOARCH)
 }

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -26,7 +25,7 @@ type Config struct {
 func getPathEnv() string {
 	abs, err := filepath.Abs(".env")
 	if err == nil {
-		fmt.Println("Absolute path is:", abs)
+		log.Println("Absolute path is: ", abs)
 	}
 	return abs
 }
@@ -34,9 +33,8 @@ func getPathEnv() string {
 func GetConfigSystem() Config {
 	APP_ENV := os.Getenv("APP_ENV")
 
-	if APP_ENV == DEV {
+	if APP_ENV != PROD {
 		err := godotenv.Load(getPathEnv())
-
 		if err != nil {
 			log.Fatal("Error loading env")
 		}

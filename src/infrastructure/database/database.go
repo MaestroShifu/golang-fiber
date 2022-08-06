@@ -2,8 +2,10 @@ package database
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/MaestroShifu/golang-fiber/src/infrastructure/config"
+	"github.com/MaestroShifu/golang-fiber/src/infrastructure/database/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -21,13 +23,22 @@ func configDatabase() gorm.Dialector {
 	return postgres.New(configPostgreSQL)
 }
 
+func AutoMigrate(db *gorm.DB) {
+	dbName := db.Migrator().CurrentDatabase()
+	log.Println("start auto migration in ", dbName)
+
+	// Install complement working generate uuid
+	db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
+	db.AutoMigrate(&models.ProductModel{})
+}
+
 func Connect() (*gorm.DB, error) {
 	dataBaseConfig := configDatabase()
 	db, err := gorm.Open(dataBaseConfig, &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
-		fmt.Println("Error connect to db:", err)
+		log.Fatal("error connect to db:", err)
 		return nil, err
 	}
 	return db, nil
